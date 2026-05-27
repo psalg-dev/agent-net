@@ -1,0 +1,3 @@
+# Manager registers in Windows startup on first Install Action
+
+When the user performs their first Install Action (any tool), the Manager writes itself to `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`. This pairs auto-start with the moment of explicit setup intent — the user is already configuring agent-net, so registering for login-start fits that action without requiring a separate "enable auto-start" step. The Manager removes the startup entry when the user chooses Quit from the tray menu (with a confirmation prompt). The executable path written to the registry is the Manager's own resolved path at runtime, consistent with the dynamic path detection used for Install Actions (ADR 0004, detect own path dynamically).

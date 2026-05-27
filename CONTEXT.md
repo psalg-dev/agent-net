@@ -23,3 +23,18 @@ An ephemeral message sent to all agents in a Room not tied to any Claim. Used fo
 
 ## Hub
 The internal HTTP process that owns all Room and Claim state. Managed by the agent-net stdio process — auto-started on first agent connection, reused by subsequent connections. Agents do not interact with the Hub directly; they use MCP tools via stdio.
+
+## Manager
+A long-running GUI process that owns the system tray icon, starts and monitors the Hub, and exposes the Install menu for configuring agent-net in supported tools. Separate from the Hub and from the stdio MCP wrapper. Started automatically on Windows login (after the first Install Action).
+
+## Tray
+The system tray icon and context menu provided by the Manager. Fixed menu structure: non-clickable title item (`agent-net`), three Install Actions (one per supported tool), separator, Quit item. Quit stops the Manager and removes the Windows startup entry (after confirming with the user).
+
+## Install Action
+Writing (or upserting) agent-net's stdio MCP server configuration into the global config file of a supported tool. Triggered from the Tray menu. The command written points to the Manager's own resolved executable path. On success, shows a balloon notification. On first Install Action of any kind, also registers the Manager in the Windows startup registry.
+
+## Supported Tools
+The three tools that an Install Action can target. Each has a known global MCP config file path and format:
+- **Claude Code** — `~/.claude.json`, key `mcpServers`, `type: "stdio"`
+- **Copilot CLI** — `~/.copilot/mcp-config.json`, key `mcpServers`, `type: "local"`, `tools: ["*"]`
+- **VSCode** — `~/AppData/Roaming/Code/User/mcp.json`, key `servers`, `type: "stdio"`
