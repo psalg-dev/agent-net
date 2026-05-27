@@ -1,0 +1,3 @@
+# Rooms are automatically scoped by git remote URL and branch
+
+There are no explicit room IDs or join calls. A Room is identified by the combination of git remote URL and branch name, derived from context the agent already has at registration time. Agents on the same repo and branch are automatically in the same Room; agents on different branches are isolated. We chose implicit scoping over explicit room IDs because agents always know their repo and branch, making zero-config coordination the default. Branch-level isolation prevents agents working on separate features from seeing each other's claims.
